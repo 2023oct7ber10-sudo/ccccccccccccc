@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
-import { Student, Result } from '../types';
+import { Result } from '../types';
 import { ChevronDown, ChevronUp, List, Filter, Clock, Calendar, AlertCircle } from 'lucide-react';
 import { getCategoryColor, getGradeColor } from '../utils/contestStats';
 import { getAllResults } from '../utils/api';
 
 interface AllResultsSectionProps {
-  students: Student[];
+  students: Result[];
   isDarkMode?: boolean;
 }
 
 export const AllResultsSection: React.FC<AllResultsSectionProps> = ({ students, isDarkMode = false }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [contestStarted] = useState(true); // المسابقة بدأت والنتائج متاحة
   const [results, setResults] = useState<Result[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   
@@ -64,7 +63,7 @@ export const AllResultsSection: React.FC<AllResultsSectionProps> = ({ students, 
                 </p>
               </div>
             ) : results.length === 0 ? (
-              /* Contest not started message */
+              /* No results message */
               <div className="max-w-2xl mx-auto">
                 <div className={`border-2 rounded-3xl p-8 shadow-2xl relative overflow-hidden transition-colors duration-300 ${
                   isDarkMode 
@@ -86,7 +85,7 @@ export const AllResultsSection: React.FC<AllResultsSectionProps> = ({ students, 
                     </div>
                     
                     <h3 className={`text-3xl md:text-4xl font-bold mb-4 animate-fadeInScale ${isDarkMode ? 'text-orange-200' : 'text-orange-800'}`}>
-                      لا توجد نتائج متاحة حالياً
+                      لا توجد نتائج في قاعدة البيانات
                     </h3>
                     
                     <div className={`backdrop-blur-sm rounded-2xl p-6 mb-6 border transition-colors duration-300 ${
@@ -95,10 +94,10 @@ export const AllResultsSection: React.FC<AllResultsSectionProps> = ({ students, 
                         : 'bg-white/70 border-orange-100'
                     }`}>
                       <p className={`text-lg md:text-xl leading-relaxed mb-4 ${isDarkMode ? 'text-orange-200' : 'text-orange-700'}`}>
-                        النتائج ستكون متاحة قريباً إن شاء الله
+                        لم يتم إدخال أي نتائج بعد
                       </p>
                       <p className={`font-semibold ${isDarkMode ? 'text-orange-300' : 'text-orange-600'}`}>
-                        يرجى المحاولة مرة أخرى لاحقاً
+                        سيتم عرض النتائج فور إدخالها في النظام
                       </p>
                     </div>
                     

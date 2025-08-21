@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Search, User, AlertCircle, Clock, BookOpen } from 'lucide-react';
-import { Student, Result } from '../types';
+import { Result } from '../types';
 import { searchResults } from '../utils/api';
 
 interface SearchSectionProps {
-  students: Student[];
+  students: Result[];
   onResult: (result: Result | null) => void;
   isDarkMode?: boolean;
 }

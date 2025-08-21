@@ -1,10 +1,10 @@
-import { Student, ContestStats } from '../types';
+import { Result, ContestStats } from '../types';
 
-export const calculateStats = (students: Student[]): ContestStats => {
-  const categories = [...new Set(students.map(s => s.category))];
-  const totalStudents = students.length;
-  const averageGrade = Math.round(students.reduce((sum, s) => sum + s.grade, 0) / totalStudents);
-  const topGrade = Math.max(...students.map(s => s.grade));
+export const calculateStats = (results: Result[]): ContestStats => {
+  const categories = [...new Set(results.map(r => r.category))];
+  const totalStudents = results.length;
+  const averageGrade = totalStudents > 0 ? Math.round(results.reduce((sum, r) => sum + r.grade, 0) / totalStudents) : 0;
+  const topGrade = totalStudents > 0 ? Math.max(...results.map(r => r.grade)) : 0;
 
   return {
     totalStudents,

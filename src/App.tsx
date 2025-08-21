@@ -17,7 +17,8 @@ import { RegistrationPage } from "./components/RegistrationPage";
 import { Clock, AlertCircle, BookOpen } from "lucide-react";
 import { rankedStudents } from "./data/students";
 import { calculateStats } from "./utils/contestStats";
-import { Student, Result } from "./types";
+import { Result } from "./types";
+import { getAllResults } from "./utils/api";
 
 function App() {
   const [searchResult, setSearchResult] = useState<Result | null>(null);
@@ -27,9 +28,11 @@ function App() {
   >("main");
   const [isDarkMode, setIsDarkMode] = useState(true);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [allResults, setAllResults] = useState<Result[]>([]);
 
-  const stats = calculateStats(rankedStudents);
+  const stats = calculateStats(allResults);
 
+  // Set dark mode as default on component mount
   // Set dark mode as default on component mount
   useEffect(() => {
     document.documentElement.classList.add("dark");
@@ -48,6 +51,20 @@ function App() {
       audioRef.current.currentTime = 0;
     }
   }, [currentPage]);
+
+  // Load results when app starts
+  useEffect(() => {
+    const loadResults = async () => {
+      try {
+        const results = await getAllResults();
+        setAllResults(results);
+      } catch (error) {
+        console.error('Error loading results:', error);
+      }
+    };
+    
+    loadResults();
+  }, []);
 
   const handleSearchResult = (result: Result | null) => {
     setSearchResult(result);
@@ -136,7 +153,7 @@ function App() {
           {currentPage === "results" && (
             <>
               <SearchSection
-                students={rankedStudents}
+                students={allResults}
                 onResult={handleSearchResult}
                 isDarkMode={isDarkMode}
               />
@@ -263,7 +280,7 @@ function App() {
 
               <StatsSection stats={stats} isDarkMode={isDarkMode} />
               <AllResultsSection
-                students={rankedStudents}
+                students={allResults}
                 isDarkMode={isDarkMode}
               />
             </>
